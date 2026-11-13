@@ -1,0 +1,1 @@
+Design and component source adapted at the user’s request from Sushmitadasari/Portfolio_series, commit d2dcf73ad8137e2da9189724de24e9982e2e15ca. Reference: https://github.com/Sushmitadasari/Portfolio_series. Personal content and PDFs replaced with Arya K. Ravi’s supplied materials. Original author photographs and credentials are not included.
