@@ -1,0 +1,21 @@
+# Example only: copy to .github/workflows/nightly-etl.yml to enable.
+name: Nightly ETL
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python series/lab/examples/nightly_etl.py series/lab/examples/sample.csv cleaned.csv
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cleaned-data
+          path: cleaned.csv
