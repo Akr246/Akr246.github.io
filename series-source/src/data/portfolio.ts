@@ -917,7 +917,7 @@ export const introSlides: IntroSlide[] = [
     ]
   }
 ];
-export type ProfileId = 'arya' | 'recruiter' | 'developer' | 'creative';
+export type ProfileId = 'arya' | 'recruiter' | 'developer' | 'creative' | 'projectlab';
 export type SectionId = 'about' | 'journey' | 'originals' | 'picks' | 'skills' | 'moments' | 'story';
 
 export const viewerProfiles: {
@@ -927,6 +927,7 @@ export const viewerProfiles: {
   color: string;
   order: SectionId[];
 }[] = [
+  { id: 'projectlab', name: 'Project Lab', blurb: 'Episode 3 · All 50 interactive demos', color: '#b5264f', order: ['about', 'journey', 'originals', 'picks', 'skills', 'moments', 'story'] },
   {
     id: 'arya',
     name: 'Arya',
@@ -939,14 +940,14 @@ export const viewerProfiles: {
     name: 'Recruiter',
     blurb: 'Resume, achievements & skills first',
     color: '#4cc9ff',
-    order: ['story', 'moments', 'skills', 'originals', 'about', 'journey', 'picks'],
+    order: ['story', 'moments', 'originals', 'skills', 'about', 'journey', 'picks'],
   },
   {
     id: 'developer',
     name: 'Product Builder',
-    blurb: 'Projects, methods & resources first',
+    blurb: 'Methods, projects & resources',
     color: '#46e3a8',
-    order: ['originals', 'skills', 'journey', 'moments', 'about', 'picks', 'story'],
+    order: ['skills', 'journey', 'originals', 'moments', 'about', 'picks', 'story'],
   },
   {
     id: 'creative',
@@ -960,7 +961,7 @@ export const viewerProfiles: {
 export const sectionMeta: Record<SectionId, { nav: string; card: string; meta: string; palette: Palette }> = {
   about: { nav: 'About', card: 'About Me', meta: 'The Pilot • Education & training', palette: {"from": "#120822", "via": "#3d1a6e", "to": "#07060c", "accent": "#b98bff"} },
   journey: { nav: 'Journey', card: 'My Journey', meta: `${seasons.length} Seasons • ${seasons.reduce((n, s) => n + s.episodes.length, 0)} Episodes`, palette: {"from": "#1c1003", "via": "#6b3c06", "to": "#0a0806", "accent": "#ffb547"} },
-  originals: { nav: 'Originals', card: 'My Projects', meta: `${projects.length} Originals • 2026`, palette: {"from": "#24060b", "via": "#6e0d1d", "to": "#09070a", "accent": "#ff3d5a"} },
+  originals: { nav: 'All Projects', card: 'All Projects', meta: `50 demos + ${projects.length} case studies • Episode 03`, palette: {"from": "#24060b", "via": "#6e0d1d", "to": "#09070a", "accent": "#ff3d5a"} },
   picks: { nav: 'Top Picks', card: 'Top Picks', meta: 'Top 10 from the resume', palette: {"from": "#03150f", "via": "#0d5a40", "to": "#050a08", "accent": "#46e3a8"} },
   skills: { nav: 'Skills', card: 'My Skills', meta: `${skillCategories.length} Categories`, palette: {"from": "#04121f", "via": "#0f4c6e", "to": "#05080d", "accent": "#4cc9ff"} },
   moments: { nav: 'Moments', card: 'My Achievements', meta: `${achievements.length} Moments • ${certifications.length} Certifications`, palette: {"from": "#24060b", "via": "#6e0d1d", "to": "#09070a", "accent": "#ff3d5a"} },

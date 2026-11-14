@@ -13,7 +13,7 @@ export function ProfileAvatar({ id, size = 'lg' }: { id: ProfileId; size?: 'sm' 
       </span>
     );
   }
-  const glyph = { recruiter: 'R', developer: '</>', creative: '✦' }[id];
+  const glyph = { recruiter: 'R', developer: '</>', creative: '✦', projectlab: 'LAB' }[id];
   return (
     <span
       className={`relative flex items-center justify-center overflow-hidden font-display text-bone ${box}`}
@@ -53,7 +53,7 @@ export default function ProfileSelector({ onPick }: { onPick: (id: ProfileId) =>
         Who&apos;s watching?
       </motion.h2>
       <motion.ul
-        className="relative grid grid-cols-2 gap-6 sm:flex sm:gap-8"
+        className="relative grid grid-cols-2 gap-6 sm:grid-cols-3 lg:flex lg:gap-8"
         initial="hidden"
         animate="show"
         transition={{ staggerChildren: 0.08, delayChildren: 0.2 }}

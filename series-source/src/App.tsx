@@ -11,7 +11,7 @@ import ContinueWatching from './components/ContinueWatching';
 import Scene from './components/Scene';
 import About from './components/About';
 import Seasons from './components/Seasons';
-import Originals from './components/Originals';
+import AllProjects from './components/AllProjects';
 import TopPicks from './components/TopPicks';
 import Skills from './components/Skills';
 import Achievements from './components/Achievements';
@@ -30,7 +30,9 @@ const STORAGE_KEY = 'arya-series-profile';
 
 function readStoredProfile(): ProfileId | null {
   try {
-    const v = sessionStorage.getItem(STORAGE_KEY);
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('profiles')) return null;
+    const v = params.get('profile') ?? sessionStorage.getItem(STORAGE_KEY);
     return viewerProfiles.some((p) => p.id === v) ? (v as ProfileId) : null;
   } catch {
     return null;
@@ -47,7 +49,7 @@ export default function App() {
 
 function Series() {
   const stored = readStoredProfile();
-  const [stage, setStage] = useState<Stage>(stored ? 'home' : 'opening');
+  const [stage, setStage] = useState<Stage>(new URLSearchParams(window.location.search).has('profiles') ? 'profiles' : stored ? 'home' : 'opening');
   const [profileId, setProfileId] = useState<ProfileId>(stored ?? 'arya');
   const [playing, setPlaying] = useState(false);
   const [project, setProject] = useState<Project | null>(null);
@@ -66,6 +68,12 @@ function Series() {
   const pickProfile = useCallback(
     (id: ProfileId) => {
       setProfileId(id);
+      const url = new URL(window.location.href);
+      url.searchParams.set('profile', id);
+      url.searchParams.delete('profiles');
+      url.searchParams.delete('project');
+      url.hash = id === 'projectlab' ? 'originals' : '';
+      window.history.replaceState({}, '', url);
       try {
         sessionStorage.setItem(STORAGE_KEY, id);
       } catch {
@@ -89,6 +97,14 @@ function Series() {
     return () => clearTimeout(t);
   }, [toast]);
 
+  useEffect(() => {
+    if (stage !== 'home') return;
+    if (profileId === 'projectlab' || window.location.hash === '#originals') {
+      const timer = window.setTimeout(() => scrollTo('#originals', { immediate: true, offset: -80 }), 250);
+      return () => clearTimeout(timer);
+    }
+  }, [stage, profileId, scrollTo]);
+
   const closeIntro = useCallback(() => setPlaying(false), []);
   const closeProject = useCallback(() => setProject(null), []);
   const closeResume = useCallback(() => setResumeOpen(false), []);
@@ -96,7 +112,7 @@ function Series() {
   const sections: Record<SectionId, ReactNode> = {
     about: <About />,
     journey: <Seasons />,
-    originals: <Originals onOpen={setProject} />,
+    originals: <AllProjects onOpenCaseStudy={setProject} />,
     picks: <TopPicks />,
     skills: <Skills />,
     moments: <Achievements />,
