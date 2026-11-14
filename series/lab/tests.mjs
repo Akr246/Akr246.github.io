@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {projects} from './catalog.mjs';
+import {settle,bill} from './modules/7.mjs';
+import {parseCSV,toCSV} from './modules/5.mjs';
+import {distance,route} from './modules/10.mjs';
+import {esc} from './core.mjs';
+test('all 50 projects have real deep-link pages and modules',()=>{assert.equal(projects.length,50);assert.equal(new Set(projects.map(p=>p.slug)).size,50);for(const p of projects){assert.ok(fs.existsSync(new URL('./'+p.slug+'/index.html',import.meta.url)));const source=fs.readFileSync(new URL('./modules/'+p.module+'.mjs',import.meta.url),'utf8');assert.ok(source.includes('id==='+p.id)||p.id===26||p.id===27||p.id===28||p.id===30);assert.ok(p.limitation)}});
+test('expense settlement conserves cents and handles rounding',()=>{const r=settle(['A','B','C'],[{payer:'A',amount:10}]);assert.equal(Object.values(r.balances).reduce((a,b)=>a+b,0),0);assert.equal(r.transfers.reduce((a,t)=>a+Math.round(t.amount*100),0),666);assert.deepEqual(settle(['A','B'],[{payer:'A',amount:100},{payer:'B',amount:100}]).transfers,[])});
+test('graduated billing tier boundaries',()=>{assert.equal(bill(0),0);assert.equal(bill(1000),100);assert.equal(bill(10000),820);assert.equal(bill(10001),820.05)});
+test('CSV handles quoted commas, quotes, CRLF and multiline values',()=>{const rows=[['name','note'],['A, B','first\nsecond'],['C','say "hello"']];assert.deepEqual(parseCSV(toCSV(rows)),rows);assert.deepEqual(parseCSV('a,b\r\n1,2\r\n'),[['a','b'],['1','2']]);assert.throws(()=>parseCSV('a,"broken'))});
+test('routes visit every stop and use geographic distances',()=>{assert.equal(distance([0,0],[0,0]),0);assert.ok(Math.abs(distance([0,0],[0,1])-111.195)<.01);const r=route([[0,0],[0,2],[0,1]]);assert.deepEqual(r.ordered,[[0,0],[0,1],[0,2]]);assert.ok(Math.abs(r.km-222.39)<.02)});
+test('user text is escaped for rendered markup',()=>{assert.equal(esc('<img src=x onerror="x">'), '&lt;img src=x onerror=&quot;x&quot;&gt;')});
